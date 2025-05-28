@@ -109,7 +109,7 @@ export default function ProcessSection() {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative w-4/5 h-4/5 overflow-hidden rounded-2xl">
                   <Image
-                    src="/placeholder.svg?height=800&width=600"
+                    src="https://picsum.photos/600/800?grayscale&random=7"
                     alt="Creative process"
                     fill
                     className="object-cover"

@@ -4,6 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Lens } from "./magicui/lens"
 
 // Sample artwork data
 const artworks = [
@@ -12,7 +13,7 @@ const artworks = [
     title: "Ethereal Dreams",
     category: "Paintings",
     year: 2023,
-    image: "/placeholder.svg?height=600&width=800",
+    image: "https://picsum.photos/600/800?grayscale&random=6",
     description: "Oil on canvas exploring themes of consciousness and dreams.",
   },
   {
@@ -20,7 +21,7 @@ const artworks = [
     title: "Urban Fragments",
     category: "Digital",
     year: 2022,
-    image: "/placeholder.svg?height=800&width=600",
+    image: "https://picsum.photos/600/800?grayscale&random=7",
     description: "Digital collage representing urban life and its complexities.",
   },
   {
@@ -28,7 +29,7 @@ const artworks = [
     title: "Harmony in Bronze",
     category: "Sculptures",
     year: 2023,
-    image: "/placeholder.svg?height=700&width=700",
+    image: "https://picsum.photos/600/800?grayscale&random=8",
     description: "Bronze sculpture exploring balance and harmony in form.",
   },
   {
@@ -36,7 +37,7 @@ const artworks = [
     title: "Reflections",
     category: "Paintings",
     year: 2021,
-    image: "/placeholder.svg?height=600&width=900",
+    image: "https://picsum.photos/600/800?grayscale&random=9",
     description: "Acrylic on canvas depicting reflections on water surfaces.",
   },
   {
@@ -44,7 +45,7 @@ const artworks = [
     title: "Digital Dystopia",
     category: "Digital",
     year: 2022,
-    image: "/placeholder.svg?height=800&width=800",
+    image: "https://picsum.photos/600/800?grayscale&random=10",
     description: "Digital art exploring themes of technology and society.",
   },
   {
@@ -52,7 +53,7 @@ const artworks = [
     title: "Spatial Concept",
     category: "Installations",
     year: 2023,
-    image: "/placeholder.svg?height=600&width=800",
+    image: "https://picsum.photos/600/800?grayscale&random=11",
     description: "Mixed media installation examining space and perception.",
   },
   {
@@ -60,7 +61,7 @@ const artworks = [
     title: "Chromatic Fusion",
     category: "Paintings",
     year: 2021,
-    image: "/placeholder.svg?height=700&width=500",
+    image: "https://picsum.photos/600/800?grayscale&random=12",
     description: "Oil on canvas exploring color theory and emotional response.",
   },
   {
@@ -68,7 +69,7 @@ const artworks = [
     title: "Geometric Harmony",
     category: "Sculptures",
     year: 2022,
-    image: "/placeholder.svg?height=800&width=600",
+    image: "https://picsum.photos/600/800?grayscale&random=13",
     description: "Marble sculpture focusing on geometric patterns and forms.",
   },
   {
@@ -76,7 +77,7 @@ const artworks = [
     title: "Virtual Landscapes",
     category: "Digital",
     year: 2023,
-    image: "/placeholder.svg?height=600&width=900",
+    image: "https://picsum.photos/600/800?grayscale&random=14",
     description: "Digital artwork creating imaginary landscapes and environments.",
   },
   {
@@ -84,7 +85,7 @@ const artworks = [
     title: "Temporal Shift",
     category: "Installations",
     year: 2021,
-    image: "/placeholder.svg?height=700&width=700",
+    image: "https://picsum.photos/600/800?grayscale&random=15",
     description: "Interactive installation exploring concepts of time and change.",
   },
   {
@@ -92,7 +93,7 @@ const artworks = [
     title: "Abstract Emotions",
     category: "Paintings",
     year: 2022,
-    image: "/placeholder.svg?height=800&width=600",
+    image: "https://picsum.photos/600/800?grayscale&random=16",
     description: "Abstract expressionist painting capturing raw emotional states.",
   },
   {
@@ -100,7 +101,7 @@ const artworks = [
     title: "Digital Metamorphosis",
     category: "Digital",
     year: 2023,
-    image: "/placeholder.svg?height=600&width=800",
+    image: "https://picsum.photos/600/800?grayscale&random=17",
     description: "Digital artwork exploring transformation and evolution.",
   },
 ]
@@ -126,6 +127,7 @@ export default function GalleryGrid({ category = "All", limit }: GalleryGridProp
         transition={{ duration: 0.5, staggerChildren: 0.1 }}
       >
         {displayedArtworks.map((artwork, index) => (
+          
           <motion.div
             key={artwork.id}
             initial={{ opacity: 0, y: 20 }}
@@ -136,13 +138,15 @@ export default function GalleryGrid({ category = "All", limit }: GalleryGridProp
           >
             <div className="relative overflow-hidden rounded-lg">
               <div className="aspect-square overflow-hidden">
+                <Lens zoomFactor	={1.6} >
                 <Image
-                  src={artwork.image || "/placeholder.svg"}
+                  src={artwork.image || "https://picsum.photos/600/800?grayscale&random=6"}
                   alt={artwork.title}
                   width={800}
                   height={800}
                   className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                 />
+                </Lens>
               </div>
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                 <h3 className="text-white text-xl font-bold">{artwork.title}</h3>
@@ -151,6 +155,7 @@ export default function GalleryGrid({ category = "All", limit }: GalleryGridProp
                 </p>
               </div>
             </div>
+            
           </motion.div>
         ))}
       </motion.div>
@@ -161,7 +166,7 @@ export default function GalleryGrid({ category = "All", limit }: GalleryGridProp
             <div className="grid md:grid-cols-2 gap-0">
               <div className="relative aspect-square">
                 <Image
-                  src={selectedArtwork.image || "/placeholder.svg"}
+                  src={selectedArtwork.image || "https://picsum.photos/600/800?grayscale&random=6"}
                   alt={selectedArtwork.title}
                   fill
                   className="object-cover"

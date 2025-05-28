@@ -20,24 +20,31 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
-
   const isHomePage = pathname === "/"
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
-
+    const handleScroll = () => setScrolled(window.scrollY > 50)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const currentNavItems = navItems.map((item) => {
-    if (!isHomePage && item.href.startsWith("#")) {
-      return { ...item, href: `/${item.href}` }
-    }
-    return item
-  })
+  // Adjust anchor links for non-home pages
+  const currentNavItems = navItems.map((item) =>
+    !isHomePage && item.href.startsWith("#")
+      ? { ...item, href: `/${item.href}` }
+      : item
+  )
+
+  // Animation variants for DRYness
+  const navItemVariants = {
+    initial: { opacity: 0, y: -20 },
+    animate: { opacity: 1, y: 0 },
+  }
+
+  const mobileNavItemVariants = {
+    initial: { opacity: 0, y: 50 },
+    animate: { opacity: 1, y: 0 },
+  }
 
   return (
     <motion.header
@@ -61,12 +68,14 @@ export default function Navbar() {
           </motion.span>
         </Link>
 
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           {currentNavItems.map((item, index) => (
             <motion.div
               key={item.name}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
+              variants={navItemVariants}
+              initial="initial"
+              animate="animate"
               transition={{ duration: 0.3, delay: 0.7 + index * 0.1 }}
             >
               <Link
@@ -74,12 +83,7 @@ export default function Navbar() {
                 className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors relative group font-light"
               >
                 {item.name}
-                <motion.div
-                  className="absolute -bottom-1 left-0 h-px bg-gray-900 dark:bg-white"
-                  initial={{ width: 0 }}
-                  whileHover={{ width: "100%" }}
-                  transition={{ duration: 0.3 }}
-                />
+                <span className="block absolute -bottom-1 left-0 h-px w-0 group-hover:w-full bg-gray-900 dark:bg-white transition-all duration-300" />
               </Link>
             </motion.div>
           ))}
@@ -103,14 +107,22 @@ export default function Navbar() {
           </motion.div>
         </nav>
 
+        {/* Mobile Navigation Toggle */}
         <div className="md:hidden flex items-center gap-4">
           <ModeToggle />
-          <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)} className="text-gray-900 dark:text-white">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsOpen(true)}
+            className="text-gray-900 dark:text-white"
+            aria-label="Open menu"
+          >
             <Menu className="h-6 w-6" />
           </Button>
         </div>
       </div>
 
+      {/* Mobile Navigation Drawer */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -126,17 +138,18 @@ export default function Navbar() {
                 size="icon"
                 onClick={() => setIsOpen(false)}
                 className="text-gray-900 dark:text-white"
+                aria-label="Close menu"
               >
                 <X className="h-6 w-6" />
               </Button>
             </div>
-
             <nav className="flex flex-col items-center justify-center h-[calc(100vh-100px)] gap-8">
               {currentNavItems.map((item, index) => (
                 <motion.div
                   key={item.name}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  variants={mobileNavItemVariants}
+                  initial="initial"
+                  animate="animate"
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
                   <Link

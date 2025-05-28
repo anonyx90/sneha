@@ -103,7 +103,7 @@ export default function ContactSection() {
                 transition={{ duration: 0.2 }}
               >
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
-                  <Mail className="h-5 w-5 text-white" />
+                  <Mail className="h-5 w-5 " />
                 </div>
                 <div>
                   <div className="theme-text-muted text-sm">Email</div>
@@ -120,11 +120,11 @@ export default function ContactSection() {
                 transition={{ duration: 0.2 }}
               >
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-                  <Phone className="h-5 w-5 text-white" />
+                  <Phone className="h-5 w-5 " />
                 </div>
                 <div>
-                  <div className="text-white/60 text-sm">Phone</div>
-                  <div className="text-white group-hover:text-purple-300 transition-colors">+1 (555) 123-4567</div>
+                  <div className="/60 text-sm">Phone</div>
+                  <div className=" group-hover:text-purple-300 transition-colors">+1 (555) 123-4567</div>
                 </div>
               </motion.a>
 
@@ -137,11 +137,11 @@ export default function ContactSection() {
                 transition={{ duration: 0.2 }}
               >
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-orange-500 flex items-center justify-center">
-                  <Instagram className="h-5 w-5 text-white" />
+                  <Instagram className="h-5 w-5 " />
                 </div>
                 <div>
-                  <div className="text-white/60 text-sm">Instagram</div>
-                  <div className="text-white group-hover:text-orange-300 transition-colors">@artistportfolio</div>
+                  <div className="/60 text-sm">Instagram</div>
+                  <div className=" group-hover:text-orange-300 transition-colors">@artistportfolio</div>
                 </div>
               </motion.a>
 
@@ -154,11 +154,11 @@ export default function ContactSection() {
                 transition={{ duration: 0.2 }}
               >
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
-                  <Twitter className="h-5 w-5 text-white" />
+                  <Twitter className="h-5 w-5 " />
                 </div>
                 <div>
-                  <div className="text-white/60 text-sm">Twitter</div>
-                  <div className="text-white group-hover:text-cyan-300 transition-colors">@artistportfolio</div>
+                  <div className="/60 text-sm">Twitter</div>
+                  <div className=" group-hover:text-cyan-300 transition-colors">@artistportfolio</div>
                 </div>
               </motion.a>
             </div>
@@ -176,7 +176,7 @@ export default function ContactSection() {
                   placeholder="Your Name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="bg-white/5 border-white/20 text-white placeholder:text-white/50 h-14 rounded-xl"
+                  className="bg-white/5 border-white/20  placeholder:/50 h-14 rounded-xl"
                   required
                 />
               </div>
@@ -188,7 +188,7 @@ export default function ContactSection() {
                   placeholder="Your Email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="bg-white/5 border-white/20 text-white placeholder:text-white/50 h-14 rounded-xl"
+                  className="bg-white/5 border-white/20  placeholder:/50 h-14 rounded-xl"
                   required
                 />
               </div>
@@ -199,14 +199,14 @@ export default function ContactSection() {
                   placeholder="Tell me about your project or inquiry..."
                   value={formData.message}
                   onChange={handleChange}
-                  className="bg-white/5 border-white/20 text-white placeholder:text-white/50 min-h-[150px] rounded-xl"
+                  className="bg-white/5 border-white/20  placeholder:/50 min-h-[150px] rounded-xl"
                   required
                 />
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white h-14 rounded-xl font-medium group"
+                className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700  h-14 rounded-xl font-medium group"
               >
                 Send Message
                 <Send className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { X } from "lucide-react"
+import { Lens } from "@/components/magicui/lens" // 👈 Make sure this import exists
 
 interface ArtworkCardProps {
   artwork: {
@@ -28,17 +29,19 @@ export default function ArtworkCard({ artwork }: ArtworkCardProps) {
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
         <div className="relative overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800">
-          {/* Artwork image */}
           <div className="aspect-square overflow-hidden">
-            <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.6, ease: "easeOut" }}>
-              <Image
-                src={artwork.image || "/placeholder.svg"}
-                alt={artwork.title}
-                width={600}
-                height={600}
-                className="object-cover w-full h-full"
-              />
-            </motion.div>
+      <Lens zoomFactor	={1.5} >
+  <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.6, ease: "easeOut" }}>
+    <Image
+      src={artwork.image || "/placeholder.svg"}
+      alt={artwork.title}
+      width={600}
+      height={600}
+      className="object-cover w-full h-full"
+    />
+  </motion.div>
+</Lens>
+
           </div>
 
           {/* Subtle overlay */}
@@ -78,6 +81,7 @@ export default function ArtworkCard({ artwork }: ArtworkCardProps) {
             </button>
 
             <div className="aspect-square">
+              
               <Image
                 src={artwork.image || "/placeholder.svg"}
                 alt={artwork.title}

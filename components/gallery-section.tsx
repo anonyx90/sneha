@@ -13,44 +13,44 @@ const artworks = [
     id: 1,
     title: "Chromatic Dreams",
     category: "Digital Art",
-    image: "/placeholder.svg?height=600&width=600",
+    image: "https://picsum.photos/600/800?grayscale&random=1",
     color: "#FF1493",
   },
   {
     id: 2,
     title: "Fluid Emotions",
     category: "Painting",
-    image: "/placeholder.svg?height=600&width=600",
+    image: "https://picsum.photos/600/800?grayscale&random=2",
     color: "#00BFFF",
   },
   {
     id: 3,
     title: "Geometric Soul",
     category: "Mixed Media",
-    image: "/placeholder.svg?height=600&width=600",
+    image: "https://picsum.photos/600/800?grayscale&random=3",
     color: "#32CD32",
   },
   {
     id: 4,
     title: "Neon Wilderness",
     category: "Digital Art",
-    image: "/placeholder.svg?height=600&width=600",
+    image: "https://picsum.photos/600/800?grayscale&random=4",
     color: "#FFD700",
   },
   {
     id: 5,
     title: "Abstract Thoughts",
     category: "Painting",
-    image: "/placeholder.svg?height=600&width=600",
+    image: "https://picsum.photos/600/800?grayscale&random=5",
     color: "#8A2BE2",
   },
   {
     id: 6,
     title: "Vibrant Chaos",
     category: "Mixed Media",
-    image: "/placeholder.svg?height=600&width=600",
+    image: "https://picsum.photos/600/800?grayscale&random=6",
     color: "#FF5757",
-  },
+  }
 ]
 
 export default function GallerySection() {

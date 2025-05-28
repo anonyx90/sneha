@@ -42,10 +42,10 @@ export default function ArtistSection() {
               <div className="relative h-[600px] w-full max-w-md mx-auto">
                 <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800 rounded-2xl overflow-hidden">
                   <Image
-                    src="/placeholder.svg?height=800&width=600"
-                    alt="Artist portrait"
-                    fill
-                    className="object-cover"
+                  src="https://www.vets4pets.com/siteassets/species/cat/two-cats-on-wall-in-sun.jpg"
+                  alt="Artist portrait"
+                  fill
+                  className="object-cover"
                   />
                 </div>
               </div>

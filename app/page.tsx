@@ -13,8 +13,8 @@ export default function Home() {
       <ColorfulCursor />
       <main className="overflow-hidden">
         <HeroSection />
+         <ArtistSection />
         <GallerySection />
-        <ArtistSection />
         <ProcessSection />
         <ContactSection />
       </main>
