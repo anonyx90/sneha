@@ -13,26 +13,17 @@ export default function ColorfulCursor() {
   const cursorX = useMotionValue(-100)
   const cursorY = useMotionValue(-100)
 
-  const springConfig = { damping: 25, stiffness: 700 }
+  const springConfig = { damping: 30, stiffness: 500, mass: 0.5 }
   const cursorXSpring = useSpring(cursorX, springConfig)
   const cursorYSpring = useSpring(cursorY, springConfig)
 
-  // Array of vibrant colors
   const colors = [
-    "#FF5757", // Red
-    "#FF8C00", // Orange
-    "#FFD700", // Yellow
-    "#32CD32", // Lime Green
-    "#00BFFF", // Deep Sky Blue
-    "#8A2BE2", // Blue Violet
-    "#FF1493", // Deep Pink
+    "#FF5757", "#FF8C00", "#FFD700",
+    "#32CD32", "#00BFFF", "#8A2BE2", "#FF1493"
   ]
 
   useEffect(() => {
-    // Only enable custom cursor on desktop
-    if (window.innerWidth < 768) {
-      return
-    }
+    if (window.innerWidth < 768) return
 
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX - 16)
@@ -40,17 +31,26 @@ export default function ColorfulCursor() {
       setIsVisible(true)
     }
 
-    const handleMouseEnter = () => setIsHovering(true)
-    const handleMouseLeave = () => setIsHovering(false)
+    const handleMouseEnter = (e: Event) => {
+      const target = e.currentTarget as HTMLElement
+      setIsHovering(true)
+      target.classList.add("hovered-by-cursor")
+    }
 
-    // Change cursor color randomly every 2 seconds
+    const handleMouseLeave = (e: Event) => {
+      const target = e.currentTarget as HTMLElement
+      setIsHovering(false)
+      target.classList.remove("hovered-by-cursor")
+    }
+
     const colorInterval = setInterval(() => {
       const randomColor = colors[Math.floor(Math.random() * colors.length)]
       setCursorColor(randomColor)
     }, 2000)
 
-    // Add event listeners to interactive elements
-    const interactiveElements = document.querySelectorAll('button, a, [role="button"], input, textarea')
+    const interactiveElements = document.querySelectorAll(
+      'button, a, [role="button"], input, textarea, p, span, h1, h2, h3, h4, h5, h6'
+    )
 
     interactiveElements.forEach((el) => {
       el.addEventListener("mouseenter", handleMouseEnter)
@@ -74,13 +74,13 @@ export default function ColorfulCursor() {
     }
   }, [cursorX, cursorY, colors])
 
-  // Only show custom cursor on desktop
   if (typeof window !== "undefined" && window.innerWidth < 768) {
     return null
   }
 
   return (
     <>
+      {/* Main colorful blob */}
       <motion.div
         className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-50 mix-blend-difference hidden md:block"
         style={{
@@ -98,6 +98,7 @@ export default function ColorfulCursor() {
         }}
       />
 
+      {/* Inner dot */}
       <motion.div
         className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-50 hidden md:block"
         style={{

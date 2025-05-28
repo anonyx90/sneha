@@ -193,3 +193,9 @@ html {
   box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px,
     rgba(240, 46, 170, 0.2) 15px 15px;
 }
+
+.hovered-by-cursor {
+  transition: transform 0.3s ease, color 0.3s ease;
+  transform: scale(1.05);
+  color: #ff1493; /* Deep pink */
+}
