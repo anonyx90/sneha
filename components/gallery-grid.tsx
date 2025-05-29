@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Lens } from "./magicui/lens"
 
 // Sample artwork data
@@ -115,7 +115,6 @@ export default function GalleryGrid({ category = "All", limit }: GalleryGridProp
   const [selectedArtwork, setSelectedArtwork] = useState<(typeof artworks)[0] | null>(null)
 
   const filteredArtworks = category === "All" ? artworks : artworks.filter((artwork) => artwork.category === category)
-
   const displayedArtworks = limit ? filteredArtworks.slice(0, limit) : filteredArtworks
 
   return (
@@ -127,7 +126,6 @@ export default function GalleryGrid({ category = "All", limit }: GalleryGridProp
         transition={{ duration: 0.5, staggerChildren: 0.1 }}
       >
         {displayedArtworks.map((artwork, index) => (
-          
           <motion.div
             key={artwork.id}
             initial={{ opacity: 0, y: 20 }}
@@ -138,14 +136,14 @@ export default function GalleryGrid({ category = "All", limit }: GalleryGridProp
           >
             <div className="relative overflow-hidden rounded-lg">
               <div className="aspect-square overflow-hidden">
-                <Lens zoomFactor	={1.6} >
-                <Image
-                  src={artwork.image || "https://picsum.photos/600/800?grayscale&random=6"}
-                  alt={artwork.title}
-                  width={800}
-                  height={800}
-                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-                />
+                <Lens zoomFactor={1.6}>
+                  <Image
+                    src={artwork.image}
+                    alt={artwork.title}
+                    width={800}
+                    height={800}
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+                  />
                 </Lens>
               </div>
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
@@ -155,7 +153,6 @@ export default function GalleryGrid({ category = "All", limit }: GalleryGridProp
                 </p>
               </div>
             </div>
-            
           </motion.div>
         ))}
       </motion.div>
@@ -163,31 +160,35 @@ export default function GalleryGrid({ category = "All", limit }: GalleryGridProp
       <Dialog open={!!selectedArtwork} onOpenChange={() => setSelectedArtwork(null)}>
         <DialogContent className="max-w-4xl p-0 overflow-hidden">
           {selectedArtwork && (
-            <div className="grid md:grid-cols-2 gap-0">
-              <div className="relative aspect-square">
-                <Image
-                  src={selectedArtwork.image || "https://picsum.photos/600/800?grayscale&random=6"}
-                  alt={selectedArtwork.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="p-6 flex flex-col">
-                <h2 className="text-2xl font-bold mb-2">{selectedArtwork.title}</h2>
-                <p className="text-muted-foreground mb-4">
-                  {selectedArtwork.category}, {selectedArtwork.year}
-                </p>
-                <p className="mb-6">{selectedArtwork.description}</p>
-                <div className="mt-auto">
-                  <p className="text-sm text-muted-foreground">
-                    Interested in this piece?{" "}
-                    <a href="/contact" className="text-primary hover:underline">
-                      Contact for pricing
-                    </a>
+            <>
+              <DialogHeader className="px-6 pt-6">
+                <DialogTitle>{selectedArtwork.title}</DialogTitle>
+              </DialogHeader>
+              <div className="grid md:grid-cols-2 gap-0">
+                <div className="relative aspect-square">
+                  <Image
+                    src={selectedArtwork.image}
+                    alt={selectedArtwork.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-6 flex flex-col">
+                  <p className="text-muted-foreground mb-4">
+                    {selectedArtwork.category}, {selectedArtwork.year}
                   </p>
+                  <p className="mb-6">{selectedArtwork.description}</p>
+                  <div className="mt-auto">
+                    <p className="text-sm text-muted-foreground">
+                      Interested in this piece?{" "}
+                      <a href="/contact" className="text-primary hover:underline">
+                        Contact for pricing
+                      </a>
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </>
           )}
         </DialogContent>
       </Dialog>
