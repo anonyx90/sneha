@@ -4,19 +4,27 @@ import ArtistSection from "@/components/artist-section"
 import ProcessSection from "@/components/process-section"
 import ContactSection from "@/components/contact-section"
 import ColorfulCursor from "@/components/colorful-cursor"
-import ArtisticLoader from "@/components/artistic-loader"
 
 export default function Home() {
   return (
     <>
-      <ArtisticLoader />
       <ColorfulCursor />
       <main className="overflow-hidden">
-        <HeroSection />
-         <ArtistSection />
-        <GallerySection />
-        <ProcessSection />
-        <ContactSection />
+        <section id="hero">
+          <HeroSection />
+        </section>
+        <section id="artist">
+          <ArtistSection />
+        </section>
+        <section id="gallery">
+          <GallerySection />
+        </section>
+        <section id="process">
+          <ProcessSection />
+        </section>
+        <section id="contact">
+          <ContactSection />
+        </section>
       </main>
     </>
   )

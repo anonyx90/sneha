@@ -10,8 +10,8 @@ import { ModeToggle } from "@/components/mode-toggle"
 
 const navItems = [
   { name: "Home", href: "/" },
+    { name: "Artist", href: "#artist" },
   { name: "Gallery", href: "#gallery" },
-  { name: "Artist", href: "#artist" },
   { name: "Process", href: "#process" },
   { name: "Contact", href: "#contact" },
 ]
@@ -19,23 +19,59 @@ const navItems = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [activeSection, setActiveSection] = useState("")
   const pathname = usePathname()
   const isHomePage = pathname === "/"
 
+  // Scroll position
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
 
-  // Adjust anchor links for non-home pages
+      if (isHomePage) {
+        const offsets = navItems
+          .filter((item) => item.href.startsWith("#"))
+          .map((item) => {
+            const id = item.href.replace("#", "")
+            const el = document.getElementById(id)
+            if (!el) return null
+            return {
+              id,
+              offsetTop: el.getBoundingClientRect().top,
+            }
+          })
+          .filter(Boolean)
+
+        let current = ""
+        for (const section of offsets) {
+          if (section!.offsetTop < window.innerHeight / 2) {
+            current = section!.id
+          }
+        }
+        setActiveSection(current)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    handleScroll()
+
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [isHomePage])
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/"
+    if (href.startsWith("#") && isHomePage) {
+      return activeSection === href.replace("#", "")
+    }
+    return pathname === href
+  }
+
   const currentNavItems = navItems.map((item) =>
     !isHomePage && item.href.startsWith("#")
       ? { ...item, href: `/${item.href}` }
       : item
   )
 
-  // Animation variants for DRYness
   const navItemVariants = {
     initial: { opacity: 0, y: -20 },
     animate: { opacity: 1, y: 0 },
@@ -68,7 +104,7 @@ export default function Navbar() {
           </motion.span>
         </Link>
 
-        {/* Desktop Navigation */}
+        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
           {currentNavItems.map((item, index) => (
             <motion.div
@@ -80,10 +116,16 @@ export default function Navbar() {
             >
               <Link
                 href={item.href}
-                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors relative group font-light"
+                className={`relative group text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors font-light ${
+                  isActive(item.href) ? "font-semibold text-gray-900 dark:text-white" : ""
+                }`}
               >
                 {item.name}
-                <span className="block absolute -bottom-1 left-0 h-px w-0 group-hover:w-full bg-gray-900 dark:bg-white transition-all duration-300" />
+                <span
+                  className={`block absolute -bottom-1 left-0 h-px bg-gray-900 dark:bg-white transition-all duration-300 ${
+                    isActive(item.href) ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
               </Link>
             </motion.div>
           ))}
@@ -107,7 +149,7 @@ export default function Navbar() {
           </motion.div>
         </nav>
 
-        {/* Mobile Navigation Toggle */}
+        {/* Mobile menu toggle */}
         <div className="md:hidden flex items-center gap-4">
           <ModeToggle />
           <Button
@@ -122,7 +164,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation Drawer */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -154,7 +196,9 @@ export default function Navbar() {
                 >
                   <Link
                     href={item.href}
-                    className="text-4xl font-serif font-light text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    className={`text-4xl font-serif font-light text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors ${
+                      isActive(item.href) ? "underline" : ""
+                    }`}
                     onClick={() => setIsOpen(false)}
                   >
                     {item.name}

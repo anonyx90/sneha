@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from "react"
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion"
-import { ArrowDown } from "lucide-react"
+import { ArrowDown } from 'lucide-react'
 import Link from "next/link"
 import ParticleBackground from "./particleBg"
 
@@ -17,6 +17,7 @@ const geometricElements = [
 export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [loadingComplete, setLoadingComplete] = useState(false)
   const prefersReducedMotion = useReducedMotion()
 
   const { scrollYProgress } = useScroll({
@@ -39,6 +40,15 @@ export default function HeroSection() {
     return () => window.removeEventListener("mousemove", handleMouseMove)
   }, [handleMouseMove])
 
+  useEffect(() => {
+    // Check if loading screen has completed - reduced delay
+    const timer = setTimeout(() => {
+      setLoadingComplete(true)
+    }, 1200) // Slightly after loading screen (3s + 200ms buffer)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <section
       ref={containerRef}
@@ -59,20 +69,24 @@ export default function HeroSection() {
             ...position,
           }}
           initial={{ scale: 0, rotate: -180, opacity: 0 }}
-          animate={{
-            scale: 1,
-            rotate: 0,
-            opacity: 1,
-            y: prefersReducedMotion ? 0 : [0, -10, 0],
-            x: mousePosition.x * (id * 2),
-          }}
+          animate={
+            loadingComplete
+              ? {
+                  scale: 1,
+                  rotate: 0,
+                  opacity: 1,
+                  y: prefersReducedMotion ? 0 : [0, -10, 0],
+                  x: mousePosition.x * (id * 2),
+                }
+              : { scale: 0, rotate: -180, opacity: 0 }
+          }
           transition={{
-            scale: { duration: 0.8, delay },
-            rotate: { duration: 0.8, delay },
-            opacity: { duration: 0.8, delay },
+            scale: { duration: 0.8, delay: 0.2 + delay },
+            rotate: { duration: 0.8, delay: 0.2 + delay },
+            opacity: { duration: 0.8, delay: 0.2 + delay },
             y: prefersReducedMotion
               ? undefined
-              : { duration: 3 + id, repeat: Infinity, ease: "easeInOut" },
+              : { duration: 3 + id, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" },
             x: { duration: 0.3 },
           }}
           whileHover={!prefersReducedMotion ? { scale: 1.1, rotate: 15 } : undefined}
@@ -82,37 +96,48 @@ export default function HeroSection() {
       ))}
 
       {/* Main Content */}
-      <div className="container  relative z-20">
+      <div className="container relative z-20">
         <div className="max-w-6xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={loadingComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 1, delay: 0.3 }}
             className="mb-16"
           >
             <motion.h1
-              className="text-7xl md:text-9xl lg:text-[12rem] font-serif font-light leading-none tracking-tight"
+              className="text-7xl md:text-7xl lg:text-[12rem] font-serif font-light leading-none tracking-tight"
               style={{ y }}
             >
-              <span className="block text-gray-900 dark:text-white">BORING</span>
+              <span className="block text-blue-900 dark:text-blue">BORING</span>
               <span className="block text-gray-400 dark:text-gray-600 italic">IS BAD</span>
-              <motion.span
-                className="block bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent font-normal italic"
-                animate={{
-                  backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                }}
-                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                style={{ backgroundSize: "200% 200%" }}
-              >
-                For Art
-              </motion.span>
+              <span className="relative">
+                For ART
+                <svg
+                  viewBox="0 0 286 73"
+                  fill="none"
+                  className="absolute -left-2 -right-2 -top-2 bottom-0 translate-y-1"
+                >
+                  <motion.path
+                    initial={{ pathLength: 0 }}
+                    animate={loadingComplete ? { pathLength: 1 } : { pathLength: 0 }}
+                    transition={{
+                      duration: 1.25,
+                      ease: "easeInOut",
+                      delay: 1.0,
+                    }}
+                    d="M142.293 1C106.854 16.8908 6.08202 7.17705 1.23654 43.3756C-2.10604 68.3466 29.5633 73.2652 122.688 71.7518C215.814 70.2384 316.298 70.689 275.761 38.0785C230.14 1.37835 97.0503 24.4575 52.9384 1"
+                    stroke="#FACC15"
+                    strokeWidth="3"
+                  />
+                </svg>
+              </span>
             </motion.h1>
           </motion.div>
 
           <motion.p
             className="max-w-2xl mx-auto mb-12 text-xl md:text-2xl text-gray-600 dark:text-gray-400 font-light leading-relaxed"
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={loadingComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
             A creative, disruptive, and innovative artist dedicated to challenging boundaries through{" "}
@@ -122,42 +147,37 @@ export default function HeroSection() {
           </motion.p>
 
           {/* Buttons */}
-            <motion.div
+          <motion.div
             className="flex flex-col sm:flex-row gap-8 justify-center items-center mb-20"
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={loadingComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.8, delay: 1.2 }}
-            >
+          >
             <Link href="#gallery">
-              <motion.button
-              type="button"
-              className="btn"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              >
-              View Portfolio
+              <motion.button type="button" className="btn" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                View Portfolio
               </motion.button>
             </Link>
             <Link href="#contact">
               <motion.button
-              type="button"
-              className="relative flex items-center px-8 py-4 overflow-hidden font-medium text-lg transition-all bg-indigo-500 rounded-md group"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+                type="button"
+                className="relative flex items-center px-8 py-4 overflow-hidden font-medium text-lg transition-all bg-indigo-500 rounded-md group"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-              <span className="absolute top-0 right-0 w-5 h-5 transition-all duration-500 bg-indigo-700 rounded group-hover:-mr-4 group-hover:-mt-4">
-                <span className="absolute top-0 right-0 w-6 h-6 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white" />
-              </span>
-              <span className="absolute bottom-0 left-0 w-5 h-5 rotate-180 transition-all duration-500 bg-indigo-700 rounded group-hover:-ml-4 group-hover:-mb-4">
-                <span className="absolute top-0 right-0 w-6 h-6 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white" />
-              </span>
-              <span className="absolute bottom-0 left-0 w-full h-full transition-all duration-500 delay-200 -translate-x-full bg-indigo-600 rounded-md group-hover:translate-x-0" />
-              <span className="relative w-full text-left text-white transition-colors duration-200 group-hover:text-white">
-                Stay In Touch
-              </span>
+                <span className="absolute top-0 right-0 w-5 h-5 transition-all duration-500 bg-indigo-700 rounded group-hover:-mr-4 group-hover:-mt-4">
+                  <span className="absolute top-0 right-0 w-6 h-6 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white" />
+                </span>
+                <span className="absolute bottom-0 left-0 w-5 h-5 rotate-180 transition-all duration-500 bg-indigo-700 rounded group-hover:-ml-4 group-hover:-mb-4">
+                  <span className="absolute top-0 right-0 w-6 h-6 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white" />
+                </span>
+                <span className="absolute bottom-0 left-0 w-full h-full transition-all duration-500 delay-200 -translate-x-full bg-indigo-600 rounded-md group-hover:translate-x-0" />
+                <span className="relative w-full text-left text-white transition-colors duration-200 group-hover:text-white">
+                  Stay In Touch
+                </span>
               </motion.button>
             </Link>
-            </motion.div>
+          </motion.div>
         </div>
       </div>
 
@@ -165,21 +185,21 @@ export default function HeroSection() {
       <motion.div
         className="absolute bottom-12 right-12 z-30"
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={loadingComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ delay: 1.8, duration: 1 }}
         style={{ opacity }}
       >
         <motion.div
           className="flex flex-col items-center gap-4 text-gray-600 dark:text-gray-400"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          animate={loadingComplete ? { y: [0, 8, 0] } : { y: 0 }}
+          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
         >
           <span className="text-sm font-medium tracking-wider uppercase">Scroll</span>
           <motion.div
             className="w-px h-16 bg-gradient-to-b from-gray-400 to-transparent"
             initial={{ scaleY: 0 }}
-            animate={{ scaleY: 1 }}
-            transition={{ duration: 1, delay: 2 }}
+            animate={loadingComplete ? { scaleY: 1 } : { scaleY: 0 }}
+            transition={{ duration: 1, delay: 2.0 }}
           />
           <ArrowDown className="w-4 h-4" />
         </motion.div>
