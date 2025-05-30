@@ -5,6 +5,7 @@ import { motion, useMotionValue, useSpring } from "framer-motion"
 import { useTheme } from "next-themes"
 
 export default function ColorfulCursor() {
+  const [hasMounted, setHasMounted] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
   const [cursorColor, setCursorColor] = useState("#FF5757")
@@ -21,7 +22,11 @@ export default function ColorfulCursor() {
   const colors = ["#FF5757", "#FF8C00", "#FFD700", "#32CD32", "#00BFFF", "#8A2BE2", "#FF1493"]
 
   useEffect(() => {
-    if (window.innerWidth < 768) return
+    setHasMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!hasMounted || window.innerWidth < 768) return
 
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX - 16)
@@ -33,7 +38,6 @@ export default function ColorfulCursor() {
       const target = e.currentTarget as HTMLElement
       setIsHovering(true)
 
-      // Different cursor styles for different elements
       if (target.matches('button, [role="button"]')) {
         setCursorVariant("button")
       } else if (target.matches("a")) {
@@ -60,7 +64,7 @@ export default function ColorfulCursor() {
     }, 3000)
 
     const interactiveElements = document.querySelectorAll(
-      'button, a, [role="button"], input, textarea, p, span, h1, h2, h3, h4, h5, h6, [data-radix-collection-item]',
+      'button, a, [role="button"], input, textarea, p, span, h1, h2, h3, h4, h5, h6, [data-radix-collection-item]'
     )
 
     interactiveElements.forEach((el) => {
@@ -83,9 +87,9 @@ export default function ColorfulCursor() {
         el.removeEventListener("mouseleave", handleMouseLeave)
       })
     }
-  }, [cursorX, cursorY, colors])
+  }, [hasMounted, cursorX, cursorY])
 
-  if (typeof window !== "undefined" && window.innerWidth < 768) {
+  if (!hasMounted || window.innerWidth < 768) {
     return null
   }
 
@@ -106,7 +110,6 @@ export default function ColorfulCursor() {
 
   return (
     <>
-      {/* Main colorful blob - Higher z-index to appear above dialogs */}
       <motion.div
         className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none mix-blend-difference hidden md:block"
         style={{
@@ -125,7 +128,6 @@ export default function ColorfulCursor() {
         }}
       />
 
-      {/* Inner dot - Higher z-index */}
       <motion.div
         className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none hidden md:block"
         style={{
@@ -144,7 +146,6 @@ export default function ColorfulCursor() {
         }}
       />
 
-      {/* Trailing particles */}
       <motion.div
         className="fixed top-0 left-0 w-12 h-12 rounded-full pointer-events-none hidden md:block"
         style={{

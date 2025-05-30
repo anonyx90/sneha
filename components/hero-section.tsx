@@ -105,12 +105,12 @@ export default function HeroSection() {
             className="mb-16"
           >
             <motion.h1
-              className="text-7xl md:text-7xl lg:text-[12rem] font-serif font-light leading-none tracking-tight"
+              className="text-6xl md:text-6xl lg:text-[12rem] font-serif font-light leading-none tracking-tight"
               style={{ y }}
             >
               <span className="block text-blue-900 dark:text-blue">BORING</span>
-              <span className="block text-gray-400 dark:text-gray-600 italic">IS BAD</span>
-              <span className="relative">
+                <span className="block text-pink-400 dark:text-gray-600 italic text-4xl md:text-4xl lg:text-6xl">IS BAD</span>
+              <span className="relative text-yellow-500 dark:text-yellow-400">
                 For ART
                 <svg
                   viewBox="0 0 286 73"
