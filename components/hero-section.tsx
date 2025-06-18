@@ -5,6 +5,8 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 import { ArrowDown } from 'lucide-react'
 import Link from "next/link"
 import ParticleBackground from "./particleBg"
+import { client } from "@/sanity/lib/client"
+import { galleryQuery } from "@/sanity/lib/queries"
 
 const geometricElements = [
   { id: 1, size: 120, color: "#FF1493", position: { top: "15%", left: "8%" }, delay: 0, content: "CREATIVE" },
@@ -49,6 +51,22 @@ export default function HeroSection() {
     return () => clearTimeout(timer)
   }, [])
 
+   type GalleryImage = {
+     _id: string
+     imageUrl: string
+     title: string
+     category: string
+   }
+   const [images, setImages] = useState<GalleryImage[]>([])
+
+  useEffect(() => {
+    client.fetch(galleryQuery).then((data) => {
+      setImages(data)
+       console.log("Fetched images:", images )
+    })
+   
+  }, [])
+      
   return (
     <section
       ref={containerRef}
@@ -212,6 +230,19 @@ export default function HeroSection() {
         <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-purple-500 rounded-full" />
         <div className="absolute bottom-1/3 right-1/4 w-1 h-1 bg-green-500 rounded-full" />
       </div>
+       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+      {images.map((img) => (
+        <div key={img._id} className="border p-2 rounded shadow">
+          <img
+            src={img.imageUrl}
+            alt={img.title}
+            className="w-full h-auto rounded"
+          />
+          <h2 className="mt-2 font-semibold">{img.title}</h2>
+          <p className="text-sm text-gray-500">{img.category}</p>
+        </div>
+      ))}
+    </div>
     </section>
   )
 }
